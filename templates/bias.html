@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bias Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Bias Analysis</h1>
+    <canvas id="biasChart" width="400" height="200"></canvas>
+
+    <script>
+        // Get data from Flask template variables
+        var womanCorrect = {{ woman_correct }};
+        var totalWoman = {{ total_woman }};
+        var manCorrect = {{ man_correct }};
+        var totalMan = {{ total_man }};
+
+        // Calculate percentages
+        var womanPercentage = totalWoman > 0 ? (womanCorrect / totalWoman * 100).toFixed(2) : 0;
+        var manPercentage = totalMan > 0 ? (manCorrect / totalMan * 100).toFixed(2) : 0;
+
+        // Bar graph data
+        var ctx = document.getElementById('biasChart').getContext('2d');
+        var biasChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Women', 'Men'],
+                datasets: [{
+                    label: 'Percentage of Correct Predictions',
+                    data: [womanPercentage, manPercentage],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Percentage'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
